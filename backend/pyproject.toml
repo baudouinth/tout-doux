@@ -1,0 +1,11 @@
+[project]
+name = "tout-doux-backend"
+version = "1.0.0"
+authors = [{ name = "Baudouin Théobald" }]
+description = "Next-level TODO list manager"
+readme = "README.md"
+requires-python = "~=3.10"
+dependencies = ["flask", "flask_sqlalchemy", "flask_cors", "pyjwt"]
+
+[tool.setuptools]
+py-modules = ["backend"]

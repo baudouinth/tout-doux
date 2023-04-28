@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2>Database content</h2>
+<table border=1>
+    <tr>
+        <th> username </th>
+        <th> email </th>
+        <th> password_hash </th>
+    </tr>
+    {% for user in users %}
+    <tr>
+        <th> {{ user.username }} </th>
+        <td> {{ user.email }} </td>
+        <td> {{ user.password_hash }} </td>
+
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
