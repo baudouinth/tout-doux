@@ -1,21 +1,26 @@
-import './App.css';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Login, Register } from './LoginComponents';
 import Home from './Home';
+import { Login, Register } from './LoginComponents';
 
 export default function App() {
   return (
     <div>
-      <h1>Tout Doux</h1>
-      <BrowserRouter>
-        <Routes>
-          <Route exact path="/" element={<Home />} />
-          <Route exact path="/login" element={<Login />} />
-          <Route exact path="/register" element={<Register />} />
-        </Routes>
-      </BrowserRouter>
+      <header>
+        <h1>Tout Doux</h1>
+      </header>
+      <div className="content">
+        <BrowserRouter>
+          <Routes>
+            <Route exact path="/" element={<Home />} />
+            <Route exact path="/login" element={<Login />} />
+            <Route exact path="/register" element={<Register />} />
+            <Route exact path="/project/:project_id" element={<Home />} />
+            <Route exact path="*" element={<strong>Not Found</strong>} />
+          </Routes>
+        </BrowserRouter>
+      </div>
       <footer>
-        <p>&copy; 2023 Baudouin Théobald</p>
+        <p>© 2023 Baudouin Théobald</p>
       </footer>
     </div>
   );

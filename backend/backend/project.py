@@ -1,7 +1,7 @@
 import json
 from uuid import uuid4
 
-from flask import jsonify
+from flask import jsonify, request
 
 from backend import APP, DB
 from backend.user import User, requires_login
@@ -46,9 +46,9 @@ def list_(current_user: User):
 
 
 @APP.route("/api/project/get")
-@autofill_args
 @requires_login
-def get(current_user: User, unique_id: str):
+def get(current_user: User):
+    unique_id = request.args.get("unique_id")
     project = Project.query.filter_by(unique_id=unique_id).first()
     if project is None or project.owner != current_user.username:
         return jsonify({"message": "Project not found"}), 404

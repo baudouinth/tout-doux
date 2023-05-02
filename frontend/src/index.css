@@ -1,5 +1,11 @@
+html {
+  min-height: 100%;
+}
+
 body {
-  margin: 0;
+  width: 70%;
+  min-height: 100%;
+  margin: auto;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -7,7 +13,47 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+button {
+  cursor: pointer;
+  border: 0;
+  border-radius: 5px;
+}
+
+.content {
+  min-height: 80%;
+}
+
+.horizontalBox {
+  display: flex;
+  flex-direction: row;
+}
+
+.between {
+  justify-content: space-between;
+}
+
+.sideBar {
+  width: 30%;
+}
+
+.mainBox {
+  margin-left: 10px;
+  margin-right: 10px;
+  flex-grow: 1;
+}
+
+.text {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+:has(.centered) {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+h3 {
+  margin-top: 0;
 }

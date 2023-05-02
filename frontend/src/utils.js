@@ -11,15 +11,16 @@ export function api_request(location, args = {}) {
     if (jwt !== undefined) {
         headers["x-access-tokens"] = jwt;
     }
-    console.log("fetching " + location);
+
     return fetch(
-        "http://localhost:5001/api/" + location,
+        "http://localhost:5001/api/" + location + "?" + new URLSearchParams(args.params),
         {
             method: args.method || "GET",
             headers: Object.assign({}, headers, args.headers),
             body: args.body ? JSON.stringify(args.body) : null,
         }
     );
+
 }
 
 export async function current_user() {
@@ -28,12 +29,11 @@ export async function current_user() {
         return undefined;
     }
     return await api_request("user/current")
-        .then(async response => {
-            if (response.ok) return await response.json().then(body => body.username);
+        .then(response => {
+            if (response.ok) return response.json().then(body => body.username);
             else return undefined;
         });
 }
-
 
 export function logout() {
     cookies.remove("jwt");
