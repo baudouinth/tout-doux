@@ -1,0 +1,18 @@
+version: '3'
+services:
+  frontend:
+    image: tout-doux-frontend
+    build: ./frontend
+    container_name: tout-doux-frontend
+    ports:
+      - "3000:3000"
+  backend:
+    image: tout-doux-backend
+    build: ./backend
+    container_name: tout-doux-backend
+    environment:
+      - DEBUG=true
+    volumes:
+      - ./data:/app/data
+    ports:
+      - "5001:5001"

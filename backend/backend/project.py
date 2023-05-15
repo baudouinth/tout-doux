@@ -4,16 +4,10 @@ from uuid import uuid4
 from flask import jsonify, request
 
 from backend import APP, DB
-from backend.user import User, requires_login
+from backend.share import has_share
+from backend.tables import Project, User
+from backend.user import requires_login
 from backend.utils import autofill_args
-
-
-class Project(DB.Model):  # type:ignore
-    __tablename__ = "projects"
-    unique_id = DB.Column(DB.String(100), primary_key=True)
-    owner = DB.Column(DB.String(100))
-    name = DB.Column(DB.String(100))
-    content = DB.Column(DB.String())
 
 
 def new_project(owner: str) -> Project:
@@ -49,8 +43,12 @@ def list_(current_user: User):
 @requires_login
 def get(current_user: User):
     unique_id = request.args.get("unique_id")
+    assert unique_id is not None
     project = Project.query.filter_by(unique_id=unique_id).first()
-    if project is None or project.owner != current_user.username:
+    if project is None or (
+        current_user.username != project.owner
+        and not has_share(unique_id, current_user.username)
+    ):
         return jsonify({"message": "Project not found"}), 404
 
     return jsonify(
@@ -73,7 +71,10 @@ def edit(
     new_content: list[str] | None = None,
 ):
     project = Project.query.filter_by(unique_id=unique_id).first()
-    if project is None or project.owner != current_user.username:
+    if project is None or (
+        current_user.username != project.owner
+        and not has_share(unique_id, current_user.username)
+    ):
         return jsonify({"message": "Project not found"}), 404
 
     if new_name is not None:

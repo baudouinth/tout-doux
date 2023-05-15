@@ -6,7 +6,7 @@ import { api_request, current_user, logout } from "./utils";
 class HomeBase extends Component {
     constructor(props) {
         super(props);
-        this.state = { user: undefined, projects: [] };
+        this.state = { user: undefined, projects: [], shares: [] };
     }
 
     componentDidMount() {
@@ -20,6 +20,9 @@ class HomeBase extends Component {
         api_request("project/list")
             .then(response => response.json())
             .then(body => this.setState({ "projects": body.projects }));
+        api_request("share/list")
+            .then(response => response.json())
+            .then(body => this.setState({ "shares": body.shares }));
     };
 
     newProject = () => {
@@ -33,6 +36,13 @@ class HomeBase extends Component {
             body: { unique_id: unique_id }
         })
             .then(() => this.updateProjects());
+    };
+
+    shareProject = (unique_id, username) => {
+        api_request("project/share/new", {
+            method: "POST",
+            body: { project_id: unique_id, new_editor: username }
+        });
     };
 
     selectProject = (unique_id) => {
@@ -52,11 +62,19 @@ class HomeBase extends Component {
                 <h2>Welcome {this.state.user}</h2>
                 <a href="/" onClick={logout}>Logout</a>
                 <div className="horizontalBox">
-                    <div className="sideBar">{this.state.projects.map(project => <ProjectLink
-                        key={project.unique_id}
-                        id={project.unique_id} name={project.name}
-                        select={this.selectProject} delete={this.deleteProject} />)}
+                    <div className="sideBar">
+                        <div>{this.state.projects.map(project => <ProjectLink
+                            key={project.unique_id}
+                            id={project.unique_id} name={project.name}
+                            select={this.selectProject} delete={this.deleteProject} />)}
+                        </div>
                         <button onClick={this.newProject}>New Project</button>
+                        <h3>Shared</h3>
+                        <div>{this.state.shares.map(project => <ProjectLink
+                            key={project.unique_id}
+                            id={project.unique_id} name={project.name}
+                            select={this.selectProject} delete={this.deleteProject} />)}
+                        </div>
                     </div>
                     <Project ref={(ip) => this.project_component = ip} updateProjects={this.updateProjects} />
                 </div>

@@ -8,14 +8,8 @@ from sqlalchemy.sql import exists
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from backend import APP, DB
+from backend.tables import User
 from backend.utils import autofill_args
-
-
-class User(DB.Model):  # type:ignore
-    __tablename__ = "users"
-    username = DB.Column(DB.String(100), primary_key=True)
-    email = DB.Column(DB.String(100))
-    password_hash = DB.Column(DB.String(100))
 
 
 def new_user(username: str, email: str, password: str) -> User:
@@ -49,9 +43,10 @@ def requires_login(fun: Callable) -> Callable:
     return decorator
 
 
-# Only for testing
 @APP.route("/api/user/show_all")
 def show_all():
+    if not APP.config["DEBUG"]:
+        return "Only in debug mode"
     return render_template("show_users.html", users=User.query.all())
 
 
